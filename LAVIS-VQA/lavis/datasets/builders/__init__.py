@@ -8,9 +8,6 @@
 from lavis.datasets.builders.base_dataset_builder import load_dataset_config
 from lavis.datasets.builders.caption_builder import (
     COCOCapBuilder,
-    MSRVTTCapBuilder,
-    MSVDCapBuilder,
-    VATEXCapBuilder,
 )
 from lavis.datasets.builders.image_text_pair_builder import (
     ConceptualCaption12MBuilder,
@@ -36,11 +33,8 @@ __all__ = [
     "ConceptualCaption3MBuilder",
     "GQABuilder",
     "ImageNetBuilder",
-    "MSRVTTCapBuilder",
-    "MSVDCapBuilder",
     "OKVQABuilder",
     "SBUCaptionBuilder",
-    "VATEXCapBuilder",
     "VGCaptionBuilder",
     "VGVQABuilder",
     "TextVQABuilder"

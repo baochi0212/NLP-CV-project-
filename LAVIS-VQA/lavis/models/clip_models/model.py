@@ -34,7 +34,6 @@ from lavis.models.clip_models.clip_outputs import ClipOutput, ClipOutputFeatures
 from lavis.models.clip_models.timm_model import TimmModel
 from lavis.models.clip_models.transform import image_transform
 from lavis.models.clip_models.utils import freeze_batch_norm_2d
-from lavis.tasks.multimodal_classification import MultimodalClassificationTask
 from torch import nn
 
 from .pretrained import (

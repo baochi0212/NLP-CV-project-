@@ -52,7 +52,6 @@ __all__ = [
     "BlipFeatureExtractor",
     "BlipCaption",
     "BlipITM",
-    "BlipNLVR",
     "BlipPretrain",
     "BlipVQA",
     "Blip2Qformer",
