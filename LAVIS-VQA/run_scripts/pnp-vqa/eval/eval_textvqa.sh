@@ -1,0 +1,1 @@
+python evaluate.py --cfg-path lavis/projects/pnp-vqa/eval/textvqa_eval.yaml

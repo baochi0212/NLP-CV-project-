@@ -1,0 +1,1 @@
+python evaluate.py --cfg-path lavis/projects/blip/eval/textvqa_eval.yaml
