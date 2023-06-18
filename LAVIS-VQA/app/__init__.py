@@ -12,7 +12,7 @@ import streamlit as st
 import torch
 
 
-@st.cache()
+@st.cache_data()
 def load_demo_image():
     img_url = (
         "https://storage.googleapis.com/sfr-vision-language-research/BLIP/demo.jpg"
