@@ -12,7 +12,7 @@ Pretrained Multimodal -> Classify (FLAVA, …)
 https://pytorch.org/tutorials/beginner/flava_finetuning_tutorial.html
 
 
-Pretrained Multimodal -> Generative (BLIP, GIT, …)
+Pretrained Multimodal -> Generative (BLIP, GIT, …) aka single-stream vs dual-stream
 https://huggingface.co/microsoft/git-base-textvqa
 https://huggingface.co/Salesforce/blip-vqa-base
  
