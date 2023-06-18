@@ -4,28 +4,36 @@
  # For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
 
 model:
-  arch: albef_nlvr
-  model_type: nlvr
+  arch: blip_vqa
+  model_type: aokvqa
+  image_size: 480
 
 datasets:
-  nlvr: # name of the dataset builder
+  aok_vqa: # name of the dataset builder
     vis_processor:
         eval:
           name: "blip_image_eval"
-          image_size: 384
+          image_size: 480
     text_processor:
         eval:
-          name: "blip_caption"
+          name: "blip_question"
 
 run:
-  task: multimodal_classification
-
-  batch_size_train: 16
+  task: aok_vqa
+  # optimization-specific
+  batch_size_train: 64
   batch_size_eval: 64
   num_workers: 4
 
+  # inference-specific
+  max_len: 10
+  min_len: 1
+  num_beams: 3
+  num_ans_candidates: 128
+  inference_method: "rank"
+
   seed: 42
-  output_dir: "output/ALBEF/NLVR"
+  output_dir: "output/BLIP/AOKVQA"
 
   evaluate: True
   test_splits: ["val", "test"]

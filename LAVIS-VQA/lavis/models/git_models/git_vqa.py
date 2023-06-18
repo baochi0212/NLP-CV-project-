@@ -14,12 +14,16 @@ from transformers import AutoProcessor, AutoModelForCausalLM
 
 
 @registry.register_model("git_vqa")
-class GITVQA(BaseModel):
+class GITVQA(AutoModelForCausalLM, BaseModel):
     """
     TextVQA model
     """
 
-    PRETRAINED_MODEL_CONFIG_DICT = {"base": "configs/models/pnp-vqa/pnp_vqa_base.yaml"}
+    PRETRAINED_MODEL_CONFIG_DICT = {"base_textvqa": "configs/models/git/git_base_textvqa.yaml",
+                                    "large_textvqa": "configs/models/git/git_large_textvqa.yaml",
+                                    "base_vqa2": "configs/models/git/git_base_vqa2.yaml",
+                                    "large_vqa2": "configs/models/git/git_large_vqa2.yaml",
+                                    }
 
     def __init__(self, config):
         super().__init__()
@@ -42,8 +46,12 @@ class GITVQA(BaseModel):
             A GITOutput object containing loss and intermediate outputs,
             see :class:`lavis.models.git_outputs.GITOutput` for more details.
         """
+        pixel_values = self.processor(images=samples["image"], return_tensors="pt").pixel_values
 
-        
+        question = samples["input_text"]
+        input_ids = self.processor(text=question, add_special_tokens=False).input_ids
+        input_ids = [self.processor.tokenizer.cls_token_id] + input_ids
+        input_ids = torch.tensor(input_ids).unsqueeze(0)
 
         return
 
@@ -87,7 +95,7 @@ class GITVQA(BaseModel):
         return pred_answers
 
     @classmethod
-    def from_config(cls, model_config):
-        model = cls(model_config)
+    def from_config(cls, config):
+        model = cls.from_pretrained(config["checkpoint"])
 
         return model

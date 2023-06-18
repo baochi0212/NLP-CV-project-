@@ -4,33 +4,44 @@
  # For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
 
 model:
-  arch: albef_classification
-  model_type: ve
+  arch: blip_vqa
+  model_type: vqav2
+  image_size: 480
 
 datasets:
-  snli_ve: # name of the dataset builder
+  text_vqa: # name of the dataset builder
+    type: eval
     vis_processor:
         eval:
           name: "blip_image_eval"
+          image_size: 480
     text_processor:
         eval:
-          name: "blip_caption"
+          name: "blip_question"
 
 run:
-  task: multimodal_classification
+  task: textvqa
   # optimization-specific
-  batch_size_train: 32
+  batch_size_train: 64
   batch_size_eval: 64
-  num_workers: 4
+  num_workers: 2
+
+  # inference-specific
+  max_len: 10
+  min_len: 1
+  num_beams: 16
+  num_ans_candidates: 128
+  # inference_method: "rank"
+  inference_method: "generate"
 
   seed: 42
-  output_dir: "output/ALBEF/SNLI_VE"
+  output_dir: "output/BLIP/TextVQA"
 
   evaluate: True
-  test_splits: ["val", "test"]
+  test_splits: ["val"]
 
   # distribution-specific
   device: "cuda"
   world_size: 1
   dist_url: "env://"
-  distributed: True
+  distributed: False
