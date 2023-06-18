@@ -9,7 +9,7 @@ pip install -e .
 ```
 - Download TextVQA images:
 ```
-cd lavis/datasets/download_scripts && python download_text.py
+cd lavis/datasets/download_scripts && python download_textvqa.py
 cd ../../..
 ```
 `
