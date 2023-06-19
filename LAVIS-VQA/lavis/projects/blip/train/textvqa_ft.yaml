@@ -34,7 +34,7 @@ run:
   min_lr: 1e-5
   weight_decay: 0.02
   max_epoch: 15
-  batch_size_train: 4
+  batch_size_train: 8
   batch_size_eval: 64
   num_workers: 2
 
@@ -59,4 +59,4 @@ run:
   device: "cuda"
   world_size: 1
   dist_url: "env://"
-  distributed: False
+  distributed: True
