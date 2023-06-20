@@ -1,0 +1,34 @@
+model:
+  arch: git_vqa
+  model_type: base_textvqa
+
+datasets:
+  text_vqa: # name of the dataset builder
+    type: eval
+
+run:
+  task: textvqa
+  # optimization-specific
+  batch_size_train: 64
+  batch_size_eval: 64
+  num_workers: 2
+
+  # inference-specific
+  max_len: 10
+  min_len: 1
+  num_beams: 4
+  num_ans_candidates: 128
+  # inference_method: "rank"
+  inference_method: "generate"
+
+  seed: 42
+  output_dir: "output/GIT/TextVQA_val"
+
+  evaluate: True
+  test_splits: ["val"]
+
+  # distribution-specific
+  device: "cuda"
+  world_size: 1
+  dist_url: "env://"
+  distributed: True

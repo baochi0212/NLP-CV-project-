@@ -39,6 +39,8 @@ from lavis.models.med import XBertLMHeadDecoder
 from lavis.models.vit import VisionTransformerEncoder
 from lavis.models.clip_models.model import CLIP
 
+from lavis.models.git_models.git_vqa import GITVQA
+
 from lavis.processors.base_processor import BaseProcessor
 
 
@@ -67,6 +69,7 @@ __all__ = [
     "CLIP",
     "VisionTransformerEncoder",
     "XBertLMHeadDecoder",
+    "GITVQA",
 ]
 
 

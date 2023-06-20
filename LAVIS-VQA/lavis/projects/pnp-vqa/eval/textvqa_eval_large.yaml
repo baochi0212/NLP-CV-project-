@@ -1,6 +1,6 @@
 model:
   arch: pnp_vqa
-  model_type: base
+  model_type: large
 
 datasets:
   text_vqa: # name of the dataset builder
@@ -43,7 +43,7 @@ run:
   inference_method: "generate"
 
   seed: 42
-  output_dir: "output/PNP-VQA/TextVQA_val"
+  output_dir: "output/PNP-VQA-large/TextVQA_val"
 
   evaluate: True
   test_splits: ["val"]

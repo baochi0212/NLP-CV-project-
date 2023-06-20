@@ -19,16 +19,19 @@ class GITVQA(AutoModelForCausalLM, BaseModel):
     TextVQA model
     """
 
-    PRETRAINED_MODEL_CONFIG_DICT = {"base_textvqa": "configs/models/git/git_base_textvqa.yaml",
-                                    "large_textvqa": "configs/models/git/git_large_textvqa.yaml",
-                                    "base_vqa2": "configs/models/git/git_base_vqa2.yaml",
-                                    "large_vqa2": "configs/models/git/git_large_vqa2.yaml",
-                                    }
+    PRETRAINED_MODEL_CONFIG_DICT = {
+        "base_textvqa": "configs/models/git/git_base_textvqa.yaml",
+        "large_textvqa": "configs/models/git/git_large_textvqa.yaml",
+        "base_vqa2": "configs/models/git/git_base_vqa2.yaml",
+        "large_vqa2": "configs/models/git/git_large_vqa2.yaml",
+    }
 
     def __init__(self, config):
         super().__init__()
         self.processor = AutoProcessor.from_pretrained(config["checkpoint"])
         self.model = AutoModelForCausalLM.from_pretrained(config["checkpoint"])
+        self.fc = nn.Linear(768, config["vocab_size"])
+        self.loss_fn = nn.CrossEntropyLoss()
 
     def forward(self, samples):
         """
@@ -46,18 +49,18 @@ class GITVQA(AutoModelForCausalLM, BaseModel):
             A GITOutput object containing loss and intermediate outputs,
             see :class:`lavis.models.git_outputs.GITOutput` for more details.
         """
-        pixel_values = self.processor(images=samples["image"], return_tensors="pt").pixel_values
+        inputs = self.processor(samples["text_input"], images=samples["image"], padding="max_length", max_length=512, return_tensors="pt")
+        outputs = self.model(**inputs)
+        last_hidden_state = outputs.last_hidden_state[:, -1, :]
+        logits = self.fc(last_hidden_state)
+        loss = self.loss_fn(logits, targets)
 
-        question = samples["input_text"]
-        input_ids = self.processor(text=question, add_special_tokens=False).input_ids
-        input_ids = [self.processor.tokenizer.cls_token_id] + input_ids
-        input_ids = torch.tensor(input_ids).unsqueeze(0)
-
-        return
+        return loss
 
     def predict_answers(
         self,
         samples,
+        inference_method="generate",
         max_len=20,
         min_len=0,
         **kwargs
@@ -81,16 +84,22 @@ class GITVQA(AutoModelForCausalLM, BaseModel):
 
         torch.cuda.empty_cache()
 
-        pixel_values = self.processor(images=samples["image"], return_tensors="pt").pixel_values
+        if inference_method == "generate":
+            images = samples["image"]
+            questions = samples["text_input"]
 
-        question = samples["input_text"]
-        input_ids = self.processor(text=question, add_special_tokens=False).input_ids
-        input_ids = [self.processor.tokenizer.cls_token_id] + input_ids
-        input_ids = torch.tensor(input_ids).unsqueeze(0)
+            batch_pixel_values = self.processor(images=images, return_tensors="pt").pixel_values
 
-        generated_ids = self.model.generate(pixel_values=pixel_values, input_ids=input_ids, max_length=max_len, min_length=min_len)
+            batch_input_ids = self.processor(text=questions, add_special_tokens=False).input_ids
+            max_len = max(len(input_ids) for input_ids in batch_input_ids)
+            batch_input_ids = torch.tensor(
+                [[self.processor.tokenizer.pad_token_id]*(max_len - len(input_ids)) + [self.processor.tokenizer.cls_token_id] + input_ids
+                for input_ids in batch_input_ids]
+            )
 
-        pred_answers = self.processor.batch_decode(generated_ids, skip_special_tokens=True)
+            batch_generated_ids = self.model.generate(pixel_values=batch_pixel_values, input_ids=batch_input_ids, max_length=50, min_length=min_len)
+            answer_ids = [ batch_generated_ids[i][len(batch_input_ids[i]):] for i in range(len(batch_input_ids)) ]
+            pred_answers = self.processor.batch_decode(answer_ids, skip_special_tokens=True)
 
         return pred_answers
 
