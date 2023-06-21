@@ -39,7 +39,7 @@ run:
   num_captions_fid: 1
   min_len: 0
   max_len: 20
-  num_beams: 4
+  num_beams: 1
   inference_method: "generate"
 
   seed: 42
