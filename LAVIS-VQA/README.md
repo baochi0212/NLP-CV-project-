@@ -9,8 +9,7 @@ pip install -e .
 ```
 - Download TextVQA images:
 ```
-cd lavis/datasets/download_scripts && python download_textvqa.py
-cd ../../..
+python lavis/datasets/download_scripts/download_textvqa.py
 ```
 `
 - Train BLIP: Go to ```LAVIS-VQA/lavis/projects/blip/train/textvqa_ft.yaml``` and change ```inference_method``` to ```generate``` for generation or ```rank``` for classification, then run the following command:

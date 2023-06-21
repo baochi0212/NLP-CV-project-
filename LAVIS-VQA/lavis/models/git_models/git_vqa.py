@@ -50,6 +50,7 @@ class GITVQA(AutoModelForCausalLM, BaseModel):
             see :class:`lavis.models.git_outputs.GITOutput` for more details.
         """
         inputs = self.processor(samples["text_input"], images=samples["image"], padding="max_length", max_length=512, return_tensors="pt")
+        targets = samples["answer"]
         outputs = self.model(**inputs)
         last_hidden_state = outputs.last_hidden_state[:, -1, :]
         logits = self.fc(last_hidden_state)
