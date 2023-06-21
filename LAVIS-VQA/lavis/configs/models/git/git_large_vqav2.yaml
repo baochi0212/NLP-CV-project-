@@ -6,4 +6,4 @@
 model:
   arch: git_vqa
   checkpoint: microsoft/git-large-vqav2
-  vocab_size: 8001
+  answer_space_size: 8001

@@ -5,5 +5,5 @@
 
 model:
   arch: git_vqa
-  checkpoint: microsoft/git-base-textvqa
-  vocab_size: 8001
+  checkpoint: microsoft/git-large-textvqa
+  answer_space_size: 8001

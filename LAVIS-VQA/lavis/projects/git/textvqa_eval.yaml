@@ -5,6 +5,13 @@ model:
 datasets:
   text_vqa: # name of the dataset builder
     type: eval
+    vis_processor:
+        eval:
+          name: "git_vqa_image"
+          checkpoint: microsoft/git-base-textvqa
+    text_processor:
+        eval:
+          name: "blip_question"
 
 run:
   task: textvqa

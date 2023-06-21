@@ -14,7 +14,7 @@ from transformers import AutoProcessor, AutoModelForCausalLM
 
 
 @registry.register_model("git_vqa")
-class GITVQA(AutoModelForCausalLM, BaseModel):
+class GITVQA(BaseModel, AutoModelForCausalLM):
     """
     TextVQA model
     """
@@ -26,11 +26,11 @@ class GITVQA(AutoModelForCausalLM, BaseModel):
         "large_vqa2": "configs/models/git/git_large_vqa2.yaml",
     }
 
-    def __init__(self, config):
+    def __init__(self, checkpoint, answer_space_size):
         super().__init__()
-        self.processor = AutoProcessor.from_pretrained(config["checkpoint"])
-        self.model = AutoModelForCausalLM.from_pretrained(config["checkpoint"])
-        self.fc = nn.Linear(768, config["vocab_size"])
+        self.processor = AutoProcessor.from_pretrained(checkpoint)
+        self.model = AutoModelForCausalLM.from_pretrained(checkpoint)
+        self.fc = nn.Linear(768, answer_space_size)
         self.loss_fn = nn.CrossEntropyLoss()
 
     def forward(self, samples):
@@ -49,6 +49,7 @@ class GITVQA(AutoModelForCausalLM, BaseModel):
             A GITOutput object containing loss and intermediate outputs,
             see :class:`lavis.models.git_outputs.GITOutput` for more details.
         """
+        # TODO: finish this function
         inputs = self.processor(samples["text_input"], images=samples["image"], padding="max_length", max_length=512, return_tensors="pt")
         targets = samples["answer"]
         outputs = self.model(**inputs)
@@ -86,10 +87,7 @@ class GITVQA(AutoModelForCausalLM, BaseModel):
         torch.cuda.empty_cache()
 
         if inference_method == "generate":
-            images = samples["image"]
             questions = samples["text_input"]
-
-            batch_pixel_values = self.processor(images=images, return_tensors="pt").pixel_values
 
             batch_input_ids = self.processor(text=questions, add_special_tokens=False).input_ids
             max_len = max(len(input_ids) for input_ids in batch_input_ids)
@@ -98,7 +96,7 @@ class GITVQA(AutoModelForCausalLM, BaseModel):
                 for input_ids in batch_input_ids]
             )
 
-            batch_generated_ids = self.model.generate(pixel_values=batch_pixel_values, input_ids=batch_input_ids, max_length=50, min_length=min_len)
+            batch_generated_ids = self.model.generate(pixel_values=samples["image"], input_ids=batch_input_ids, max_length=50, min_length=min_len)
             answer_ids = [ batch_generated_ids[i][len(batch_input_ids[i]):] for i in range(len(batch_input_ids)) ]
             pred_answers = self.processor.batch_decode(answer_ids, skip_special_tokens=True)
 
@@ -106,6 +104,6 @@ class GITVQA(AutoModelForCausalLM, BaseModel):
 
     @classmethod
     def from_config(cls, config):
-        model = cls.from_pretrained(config["checkpoint"])
+        model = cls(config["checkpoint"], config["answer_space_size"])
 
         return model

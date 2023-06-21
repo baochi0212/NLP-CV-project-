@@ -14,6 +14,7 @@ from lavis.processors.blip_processors import (
     BlipCaptionProcessor,
 )
 from lavis.processors.clip_processors import ClipImageTrainProcessor
+from lavis.processors.git_vqa_processors import GITVQAImageProcessor
 
 from lavis.common.registry import registry
 
@@ -25,6 +26,7 @@ __all__ = [
     "BlipImageEvalProcessor",
     "BlipCaptionProcessor",
     "ClipImageTrainProcessor",
+    "GITVQAImageProcessor",
 ]
 
 
