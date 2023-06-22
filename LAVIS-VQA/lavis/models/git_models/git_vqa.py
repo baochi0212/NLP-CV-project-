@@ -14,7 +14,7 @@ from transformers import AutoProcessor, AutoModelForCausalLM
 
 
 @registry.register_model("git_vqa")
-class GITVQA(BaseModel, AutoModelForCausalLM):
+class GITVQA(BaseModel):
     """
     TextVQA model
     """
@@ -30,8 +30,8 @@ class GITVQA(BaseModel, AutoModelForCausalLM):
         super().__init__()
         self.processor = AutoProcessor.from_pretrained(checkpoint)
         self.model = AutoModelForCausalLM.from_pretrained(checkpoint)
-        self.fc = nn.Linear(768, answer_space_size)
-        self.loss_fn = nn.CrossEntropyLoss()
+        # self.fc = nn.Linear(768, answer_space_size)
+        # self.loss_fn = nn.CrossEntropyLoss()
 
     def forward(self, samples):
         """
@@ -94,9 +94,9 @@ class GITVQA(BaseModel, AutoModelForCausalLM):
             batch_input_ids = torch.tensor(
                 [[self.processor.tokenizer.pad_token_id]*(max_len - len(input_ids)) + [self.processor.tokenizer.cls_token_id] + input_ids
                 for input_ids in batch_input_ids]
-            )
+            ).to(self.device)
 
-            batch_generated_ids = self.model.generate(pixel_values=samples["image"], input_ids=batch_input_ids, max_length=50, min_length=min_len)
+            batch_generated_ids = self.model.generate(pixel_values=samples["image"].to(self.device), input_ids=batch_input_ids, max_length=max_len, min_length=min_len)
             answer_ids = [ batch_generated_ids[i][len(batch_input_ids[i]):] for i in range(len(batch_input_ids)) ]
             pred_answers = self.processor.batch_decode(answer_ids, skip_special_tokens=True)
 

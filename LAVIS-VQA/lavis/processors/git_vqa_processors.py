@@ -23,7 +23,7 @@ class GITVQAImageProcessor(BaseProcessor):
 
     @classmethod
     def from_config(cls, config=None):
-        if cfg is None:
-            cfg = OmegaConf.create()
+        if config is None:
+            config = OmegaConf.create()
 
         return cls(config["checkpoint"])

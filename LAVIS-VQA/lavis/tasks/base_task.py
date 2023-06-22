@@ -90,9 +90,22 @@ class BaseTask:
 
         for samples in metric_logger.log_every(data_loader, print_freq, header):
             samples = prepare_sample(samples, cuda_enabled=cuda_enabled)
-
-            eval_output = self.valid_step(model=model, samples=samples)
-            results.extend(eval_output)
+            try:
+              eval_output = self.valid_step(model=model, samples=samples)
+              results.extend(eval_output)
+            except:
+              for i in range(len(samples["text_input"])):
+                sample = {}
+                for key in samples.keys():
+                  if key == "image":
+                    sample[key] = samples[key][i, ...]
+                  else:
+                    sample[key] = samples[key][i]
+                try:
+                  eval_output = self.valid_step(model=model, samples=sample)
+                  results.extend(eval_output)
+                except:
+                  print("Error !!!!!!!!!!:", sample["question_id"])
 
         if is_dist_avail_and_initialized():
             dist.barrier()
