@@ -11,8 +11,18 @@ pip install -e .
 ```
 python lavis/datasets/download_scripts/download_textvqa.py
 ```
-`
-- Train BLIP: Go to ```LAVIS-VQA/lavis/projects/blip/train/textvqa_ft.yaml``` and change ```inference_method``` to ```generate``` for generation or ```rank``` for classification (for inferecne only not training), then run the following command:
+
+## TODO: 
+- Finetune BLIP on TextVQA:
 ```
 bash run_scripts/blip/train/train_textvqa.sh
+```
+- Evaluate PnP-VQA-3b on TextVQA:
+```
+bash run_scripts/pnp-vqa/eval/eval_textvqa_3b.sh
+``` 
+- Evaluate BLIP2 (FLANT5XL or OPT backbone) on TextVQA:
+```
+bash run_scripts/blip2/eval/eval_textvqa_zeroshot_flant5xl.sh
+bash run_scripts/blip2/eval/eval_textvqa_zeroshot_opt.sh
 ```
