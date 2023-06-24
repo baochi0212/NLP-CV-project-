@@ -461,7 +461,7 @@ class Img2PromptVQA(BaseModel):
         )
         return Img2Prompt
 
-    def prepare_LLM_input(
+    def predict_answers(
         self,
         samples,
         num_beams=1,

@@ -1,1 +1,1 @@
-python -m torch.distributed.run --nproc_per_node=1 evaluate.py --cfg-path lavis/projects/img2llm/eval/textvqa_eval.yaml
+python -m torch.distributed.run --nproc_per_node=3 evaluate.py --cfg-path lavis/projects/img2llm-vqa/eval/textvqa_eval.yaml
