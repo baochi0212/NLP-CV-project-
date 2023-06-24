@@ -33,10 +33,10 @@ run:
   init_lr: 2e-5
   min_lr: 1e-5
   weight_decay: 0.02
-  max_epoch: 20
-  batch_size_train: 4
-  batch_size_eval: 64
-  num_workers: 2
+  max_epoch: 30
+  batch_size_train: 8
+  batch_size_eval: 8
+  num_workers: 12
 
   # inference-specific
   max_len: 10

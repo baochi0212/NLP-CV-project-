@@ -1,0 +1,10 @@
+| distributed init (rank 2, world 3): env://
+| distributed init (rank 0, world 3): env://
+| distributed init (rank 1, world 3): env://
+Using downloaded and verified file: /export/home/.cache/lavis/textvqa/annotations/textvqa_train.json
+Using downloaded and verified file: /export/home/.cache/lavis/textvqa/annotations/textvqa_val.json
+Using downloaded and verified file: /export/home/.cache/lavis/textvqa/annotations/answer_list.json
+Train: data epoch: [0]  [  0/720]  eta: 1:24:29  lr: 0.000020  loss: 12.9700  time: 7.0408  data: 0.0001  max mem: 20557
+Train: data epoch: [0]  [ 50/720]  eta: 0:20:43  lr: 0.000020  loss: 23.1233  time: 1.7413  data: 0.0000  max mem: 24249
+Train: data epoch: [0]  [100/720]  eta: 0:18:38  lr: 0.000020  loss: 17.7140  time: 1.7559  data: 0.0000  max mem: 25891
+Train: data epoch: [0]  [150/720]  eta: 0:16:56  lr: 0.000020  loss: 13.8955  time: 1.7408  data: 0.0000  max mem: 25891
