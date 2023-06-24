@@ -26,3 +26,7 @@ bash run_scripts/pnp-vqa/eval/eval_textvqa_3b.sh
 bash run_scripts/blip2/eval/eval_textvqa_zeroshot_flant5xl.sh
 bash run_scripts/blip2/eval/eval_textvqa_zeroshot_opt.sh
 ```
+- Evaluate Img2LLm on TextVQA:
+```
+bash run_scripts/img2llm/eval_textvqa.sh
+```
