@@ -17,8 +17,8 @@ datasets:
 run:
   task: textvqa
   # optimization-specific
-  batch_size_train: 16
-  batch_size_eval: 64
+  batch_size_train: 2
+  batch_size_eval: 2
   num_workers: 4
 
   # inference-specific
