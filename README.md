@@ -1,4 +1,4 @@
-# NLP-CV-project-
+# Visual Question Answering
 rush 
 Pretrained image + pretrained LMs -> Classify (Resnet/ViLT + Bert)
 classify:
