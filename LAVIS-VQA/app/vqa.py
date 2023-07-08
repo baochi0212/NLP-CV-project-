@@ -71,6 +71,5 @@ def app():
 
             vqa_samples = {"image": img, "text_input": [question]}
             answers, _, _ = model.predict_answers(vqa_samples, num_captions=50, num_patches=20)
-            answers = answers[0]
 
         col2.write("\n".join(answers))
