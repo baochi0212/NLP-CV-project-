@@ -12,11 +12,21 @@ pip install -e .
 python lavis/datasets/download_scripts/download_textvqa.py
 ```
 
-## TODO: 
+## Fine-tuning 
 - Finetune BLIP on TextVQA:
 ```
 bash run_scripts/blip/train/train_textvqa.sh
 ```
+
+## Evaluation
+- Evaluate PnP-VQA on TextVQA:
+```
+bash run_scripts/pnp-vqa/eval/eval_textvqa.sh
+``` 
+- Evaluate PnP-VQA-large on TextVQA:
+```
+bash run_scripts/pnp-vqa/eval/eval_textvqa_large.sh
+``` 
 - Evaluate PnP-VQA-3b on TextVQA:
 ```
 bash run_scripts/pnp-vqa/eval/eval_textvqa_3b.sh
