@@ -10,10 +10,12 @@ from app import load_demo_image, device
 from app.utils import load_model_cache
 from lavis.processors import load_processor
 from PIL import Image
+from transformers import AutoProcessor, AutoModelForCausalLM
+import torch
 
 
 def app():
-    model_type = st.sidebar.selectbox("Model:", ["BLIP", "PnP-VQA"])
+    model_type = st.sidebar.selectbox("Model:", ["BLIP", "PnP-VQA", "GIT"])
 
     # ===== layout =====
     st.markdown(
@@ -71,5 +73,20 @@ def app():
 
             vqa_samples = {"image": img, "text_input": [question]}
             answers, _, _ = model.predict_answers(vqa_samples, num_captions=50, num_patches=20)
+            # answers = answers[0]
+        elif model_type.startswith("GIT"):
+            processor = AutoProcessor.from_pretrained("microsoft/git-base-textvqa")
+            model = AutoModelForCausalLM.from_pretrained("microsoft/git-base-textvqa")
+
+            pixel_values = processor(images=raw_img, return_tensors="pt").pixel_values
+
+            input_ids = processor(text=user_question, add_special_tokens=False).input_ids
+            input_ids = [processor.tokenizer.cls_token_id] + input_ids
+            input_ids = torch.tensor(input_ids).unsqueeze(0)
+
+            generated_ids = model.generate(pixel_values=pixel_values, input_ids=input_ids, max_length=50)
+            answer_ids = generated_ids[:, len(input_ids[0]):]
+            answers = processor.batch_decode(generated_ids[:, len(input_ids[0]):], skip_special_tokens=True)
 
         col2.write("\n".join(answers))
+
