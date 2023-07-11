@@ -11,5 +11,6 @@ npm install localtunnel
 - For generation-based models: Go to [LAVIS-VQA](https://github.com/baochi0212/visual-qa-/tree/master/LAVIS-VQA) and follow the instructions.
 - For demo, run the following command:
 ```
+cd LAVIS-VQA/app
 streamlit run main.py & npx localtunnel --port 8501
 ```
